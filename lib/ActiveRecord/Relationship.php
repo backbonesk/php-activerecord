@@ -290,10 +290,16 @@ abstract class AbstractRelationship implements InterfaceRelationship
 			$reflection = Reflections::instance()->add($class_name)->get($class_name);
 		} catch (\ReflectionException $e) {
 			if (isset($this->options['namespace'])) {
-				$class_name = $this->options['namespace'].'\\'.$class_name;
-				$reflection = Reflections::instance()->add($class_name)->get($class_name);
-			} else {
-				throw $e;
+                try {
+                    $class_name = $this->options['namespace'].'\\'.$class_name;
+                    $reflection = Reflections::instance()->add($class_name)->get($class_name);
+                }
+                catch (\ReflectionException $e) {
+                    throw new RelationshipException($e->getMessage());
+                }
+			}
+            else {
+                throw new RelationshipException($e->getMessage());
 			}
 		}
 
