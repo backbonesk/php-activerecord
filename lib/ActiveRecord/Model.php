@@ -230,6 +230,8 @@ class Model
 	 */
 	static $delegate = array();
 
+	static $model_options = array();
+
 	/**
 	 * Constructs a model.
 	 *
@@ -1563,6 +1565,7 @@ class Model
 			{
 				case 'all':
 					$single = false;
+					$options = self::apply_global_options($options);
 					break;
 
 			 	case 'last':
@@ -1741,6 +1744,29 @@ class Model
 		return $options;
 	}
 
+	public static function set_option($option, $value)
+	{
+		self::$model_options[$option] = $value;
+	}
+
+	private static function apply_global_options($current_query_options)
+	{
+		if (! self::is_options_hash(self::$model_options, FALSE))
+		{
+			return $current_query_options;
+		}
+
+		foreach (self::$model_options as $option => $value)
+		{
+			if ($value !== NULL)
+			{
+				$current_query_options[$option] = $value;
+			}
+		}
+
+		return $current_query_options;
+	}
+
 	/**
 	 * Returns a JSON representation of this model.
 	 *
@@ -1867,7 +1893,7 @@ class Model
 	 * });
 	 * </code>
 	 *
-	 * @param Closure $closure The closure to execute. To cause a rollback have your closure return false or throw an exception.
+	 * @param callback $closure The closure to execute. To cause a rollback have your closure return false or throw an exception.
 	 * @return boolean True if the transaction was committed, False if rolled back.
 	 */
 	public static function transaction($closure)
