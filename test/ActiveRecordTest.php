@@ -545,5 +545,31 @@ class ActiveRecordTest extends DatabaseTest
 
         \ActiveRecord\Model::$model_options = array();
     }
+
+    public function test_forgetting_associations()
+    {
+        $author = Author::find(2);
+
+        $books = $author->books;
+        foreach ($books as &$book)
+        {
+            $book = $book->to_array();
+        }
+
+        $books_ids = $author->forget_associations(function() use (&$author) {
+            \ActiveRecord\Model::set_option('select', 'book_id');
+            $books_ids = $author->books;
+            \ActiveRecord\Model::$model_options = array();
+
+            foreach ($books_ids as &$book)
+            {
+                $book = $book->to_array();
+            }
+
+            return $books_ids;
+        });
+
+        $this->assert_not_equals($books_ids, $books);
+    }
 };
 ?>

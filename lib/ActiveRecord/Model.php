@@ -1919,5 +1919,22 @@ class Model
 		}
 		return true;
 	}
+
+    /**
+     * Don't use cached associations while executing callback.
+     *
+     * @param $callback
+     */
+    public function forget_associations($callback)
+    {
+        $relationships = $this->__relationships;
+        $this->__relationships = array();
+
+        $result = $callback();
+
+        $this->__relationships = $relationships;
+
+        return $result;
+    }
 };
 ?>
