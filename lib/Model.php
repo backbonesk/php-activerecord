@@ -1042,6 +1042,8 @@ class Model
 		$config = Config::instance();
 
 		$validator_class = $config->get_validator();
+        if ($validator_class == '\ActiveRecord\Validations')
+            require_once 'Validations.php';
 
 		$validator = new $validator_class($this);
 		
