@@ -54,13 +54,6 @@ class DatabaseException extends ActiveRecordException
 class ModelException extends ActiveRecordException {};
 
 /**
- * Thrown by {@link Cache}.
- *
- * @package ActiveRecord
- */
-class CacheException extends ActiveRecordException {};
-
-/**
  * Thrown by {@link Expressions}.
  *
  * @package ActiveRecord

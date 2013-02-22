@@ -282,18 +282,8 @@ class SQLBuilder
 
 		foreach ($hash as $key => $value)
 		{
-			if (stripos($key, '.')) 
-			{
-				$k = explode('.', $key);
-				$k[0] = $this->connection->quote_name($k[0]);
-				$k[1] = $this->connection->quote_name($k[1]);
-				$new[$k[0].'.'.$k[1]] = $value;
-			}
-			else
-			{
-				$k = $this->connection->quote_name($key);
-				$new[$table.'.'.$k] = $value;
-			}			
+			$k = $this->connection->quote_name($key);
+			$new[$table.'.'.$k] = $value;
 		}
 
 		return $new;
@@ -310,8 +300,6 @@ class SQLBuilder
 			$e = new Expressions($this->connection,$hash);
 			$this->where = $e->to_s();
 			$this->where_values = array_flatten($e->values());
-
-
 		}
 		elseif ($num_args > 0)
 		{

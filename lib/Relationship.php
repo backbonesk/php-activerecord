@@ -529,7 +529,7 @@ class HasMany extends AbstractRelationship
 
 		$options = $this->unset_non_finder_options($this->options);
 		$options['conditions'] = $conditions;
-		return $class_name::find($this->poly_relationship ? 'all' : 'first',$options, 'is_relationship');
+		return $class_name::find($this->poly_relationship ? 'all' : 'first',$options);
 	}
 
 	private function inject_foreign_key_for_new_association(Model $model, &$attributes)
@@ -674,7 +674,7 @@ class BelongsTo extends AbstractRelationship
 		$options = $this->unset_non_finder_options($this->options);
 		$options['conditions'] = $conditions;
 		$class = $this->class_name;
-		return $class::first($options, 'is_relationship');
+		return $class::first($options);
 	}
 
 	public function load_eagerly($models=array(), $attributes, $includes, Table $table)

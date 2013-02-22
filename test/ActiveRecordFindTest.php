@@ -88,8 +88,8 @@ class ActiveRecordFindTest extends DatabaseTest
 
 	public function test_find_hash_using_alias_with_null()
 	{
-        $this->setExpectedException('\ActiveRecord\RecordNotFound');
-		Venue::all(array('conditions' => array('marquee' => null)));
+		$venues = Venue::all(array('conditions' => array('marquee' => null)));
+		$this->assert_equals(0,count($venues));
 	}
 
 	public function test_dynamic_finder_using_alias()
@@ -117,8 +117,8 @@ class ActiveRecordFindTest extends DatabaseTest
 
 	public function test_find_all_no_results()
 	{
-        $this->setExpectedException('\ActiveRecord\RecordNotFound');
-		Author::find('all',array('conditions' => array('author_id IN(11111111111,22222222222,333333333333)')));
+		$authors = Author::find('all',array('conditions' => array('author_id IN(11111111111,22222222222,333333333333)')));
+		$this->assert_equals(array(),$authors);
 	}
 
 	public function test_find_first()
@@ -130,8 +130,7 @@ class ActiveRecordFindTest extends DatabaseTest
 
 	public function test_find_first_no_results()
 	{
-        $this->setExpectedException('\ActiveRecord\RecordNotFound');
-		Author::find('first',array('conditions' => 'author_id=1111111'));
+		$this->assert_null(Author::find('first',array('conditions' => 'author_id=1111111')));
 	}
 
 	public function test_find_first_using_pk()
@@ -253,8 +252,8 @@ class ActiveRecordFindTest extends DatabaseTest
 
 	public function test_find_by_call_static_no_results()
 	{
-        $this->setExpectedException('\ActiveRecord\RecordNotFound');
-		Author::find_by_name('SHARKS WIT LASERZ');
+		$this->assert_null(Author::find_by_name('SHARKS WIT LASERZ'));
+		$this->assert_null(Author::find_by_name_or_author_id());
 	}
 
 	/**
@@ -278,8 +277,8 @@ class ActiveRecordFindTest extends DatabaseTest
 
 	public function test_find_all_by_call_static_no_results()
 	{
-        $this->setExpectedException('\ActiveRecord\RecordNotFound');
-		Author::find_all_by_name('SHARKSSSSSSS');
+		$x = Author::find_all_by_name('SHARKSSSSSSS');
+		$this->assert_equals(0,count($x));
 	}
 
 	public function test_find_all_by_call_static_with_array_values_and_options()
@@ -359,7 +358,8 @@ class ActiveRecordFindTest extends DatabaseTest
 
 	public function test_escape_quotes()
 	{
-		$this->assert_not_equals("Tito's",$this->conn->escape("Tito's"));
+		$author = Author::find_by_name("Tito's");
+		$this->assert_not_equals("Tito's",Author::table()->last_sql);
 	}
 
 	public function test_from()

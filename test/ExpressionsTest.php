@@ -1,6 +1,6 @@
 <?php
 include 'helpers/config.php';
-require '../lib/ActiveRecord/Expressions.php';
+require '../lib/Expressions.php';
 
 use ActiveRecord\Expressions;
 use ActiveRecord\ConnectionManager;

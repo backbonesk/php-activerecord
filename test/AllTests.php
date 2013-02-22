@@ -2,7 +2,7 @@
 
 foreach (glob('*Test.php') as $file)
 {
-	if (!in_array($file, array('AllValidationsTest.php', 'MemcacheCacheTest.php')))
+	if ($file != 'AllValidationsTest.php')
 		require $file;
 }
 

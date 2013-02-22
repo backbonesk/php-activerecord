@@ -15,7 +15,7 @@ require_once 'PHPUnit/Framework/TestCase.php';
 require_once 'SnakeCase_PHPUnit_Framework_TestCase.php';
 require_once 'DatabaseTest.php';
 require_once 'AdapterTest.php';
-require_once __DIR__ . '/../../lib/ActiveRecord.php';
+require_once __DIR__ . '/../../ActiveRecord.php';
 
 // whether or not to run the slow non-crucial tests
 $GLOBALS['slow_tests'] = false;
@@ -31,7 +31,7 @@ ActiveRecord\Config::initialize(function($cfg)
 {
 	$cfg->set_model_directory(realpath(__DIR__ . '/../models'));
 	$cfg->set_connections(array(
-		'mysql'  => getenv('PHPAR_MYSQL')  ?: 'mysql://root@127.0.0.1/test',
+		'mysql'  => getenv('PHPAR_MYSQL')  ?: 'mysql://test:test@127.0.0.1/test',
 		'pgsql'  => getenv('PHPAR_PGSQL')  ?: 'pgsql://test:test@127.0.0.1/test',
 		'oci'    => getenv('PHPAR_OCI')    ?: 'oci://test:test@127.0.0.1/dev',
 		'sqlite' => getenv('PHPAR_SQLITE') ?: 'sqlite://test.db'));

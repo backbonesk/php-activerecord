@@ -523,16 +523,13 @@ class RelationshipTest extends DatabaseTest
 
 	public function test_eager_loading_has_many_with_no_related_rows()
 	{
-        try {
-            $venues = Venue::find(array(7, 8), array('include' => 'events'));
-        }
-        catch (\ActiveRecord\RecordNotFound $e)
-        {
-            $this->assert_sql_has("WHERE id IN(?,?)",ActiveRecord\Table::load('Venue')->last_sql);
-            $this->assert_sql_has("WHERE venue_id IN(?,?)",ActiveRecord\Table::load('Event')->last_sql);
-            return;
-        }
-        $this->fail('An \ActiveRecord\RecordNotFound exception has not been raised.');
+		$venues = Venue::find(array(7, 8), array('include' => 'events'));
+
+		foreach ($venues as $v)
+			$this->assert_true(empty($v->events));
+
+		$this->assert_sql_has("WHERE id IN(?,?)",ActiveRecord\Table::load('Venue')->last_sql);
+		$this->assert_sql_has("WHERE venue_id IN(?,?)",ActiveRecord\Table::load('Event')->last_sql);
 	}
 
 	public function test_eager_loading_has_many_array_of_includes()
@@ -553,7 +550,7 @@ class RelationshipTest extends DatabaseTest
 		foreach ($assocs as $assoc)
 		{
 			$this->assert_internal_type('array', $authors[1]->$assoc);
-			$this->assert_true(!empty($authors[1]->$assoc));
+			$this->assert_true(empty($authors[1]->$assoc));
 		}
 
 		$this->assert_sql_has("WHERE author_id IN(?,?)",ActiveRecord\Table::load('Author')->last_sql);
@@ -632,17 +629,13 @@ class RelationshipTest extends DatabaseTest
 		$e1 = Event::create(array('venue_id' => 200, 'host_id' => 200, 'title' => 'blah','type' => 'Music'));
 		$e2 = Event::create(array('venue_id' => 200, 'host_id' => 200, 'title' => 'blah2','type' => 'Music'));
 
-        try
-        {
-            $events = Event::find(array($e1->id, $e2->id), array('include' => 'venue'));
-        }
-		catch (\ActiveRecord\RecordNotFound $e)
-        {
-            $this->assert_sql_has("WHERE id IN(?,?)",ActiveRecord\Table::load('Event')->last_sql);
-            $this->assert_sql_has("WHERE id IN(?,?)",ActiveRecord\Table::load('Venue')->last_sql);
-            return;
-        }
-        $this->fail('An \ActiveRecord\RecordNotFound exception has not been raised.');
+		$events = Event::find(array($e1->id, $e2->id), array('include' => 'venue'));
+
+		foreach ($events as $e)
+			$this->assert_null($e->venue);
+
+		$this->assert_sql_has("WHERE id IN(?,?)",ActiveRecord\Table::load('Event')->last_sql);
+		$this->assert_sql_has("WHERE id IN(?,?)",ActiveRecord\Table::load('Venue')->last_sql);
 	}
 
 	public function test_eager_loading_clones_related_objects()

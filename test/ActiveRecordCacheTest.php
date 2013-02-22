@@ -3,7 +3,7 @@ include 'helpers/config.php';
 
 use ActiveRecord\Cache;
 
-class MemcacheActiveRecordCacheTest extends DatabaseTest
+class ActiveRecordCacheTest extends DatabaseTest
 {
 	public function set_up($connection_name=null)
 	{
@@ -12,11 +12,7 @@ class MemcacheActiveRecordCacheTest extends DatabaseTest
 			$this->markTestSkipped('The memcache extension is not available');
 			return;
 		}
-
-		if (!@memcache_connect('localhost')) {
-			$this->markTestSkipped('The memcache server is not running');
-		}
-
+		
 		parent::set_up($connection_name);
 		ActiveRecord\Config::instance()->set_cache('memcache://localhost');
 	}
