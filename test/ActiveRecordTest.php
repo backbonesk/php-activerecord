@@ -519,5 +519,31 @@ class ActiveRecordTest extends DatabaseTest
 		$row = Author::query('SELECT COUNT(*) AS n FROM authors WHERE name=?',array('Tito'))->fetch();
 		$this->assert_equals(array('n' => 1), $row);
 	}
+
+    public function test_global_options()
+    {
+        \ActiveRecord\Model::set_option('select', 'name');
+        foreach (Author::all() as $author)
+        {
+            $this->assert_equals(1, count($author->attributes()));
+            $name = $author->name;
+            $this->assert_false(empty($name));
+        }
+
+        \ActiveRecord\Model::$model_options = array();
+    }
+
+    public function test_global_options_not_applying()
+    {
+        \ActiveRecord\Model::set_option('select', 'id');
+
+        $author = Author::first();
+        $this->assert_not_equals(1, count($author->attributes()));
+
+        $name = $author->name;
+        $this->assert_false(empty($name));
+
+        \ActiveRecord\Model::$model_options = array();
+    }
 };
 ?>
