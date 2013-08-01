@@ -568,7 +568,7 @@ class Model
 	 */
 	public function attribute_is_dirty($attribute)
 	{
-		return $this->__dirty && $this->__dirty[$attribute] && array_key_exists($attribute, $this->attributes);
+		return $this->__dirty && isset($this->__dirty[$attribute]) && array_key_exists($attribute, $this->attributes);
 	}
 
 	/**
@@ -762,12 +762,13 @@ class Model
 	 *
 	 * @param array $attributes Array of the models attributes
 	 * @param boolean $validate True if the validators should be run
+	 * @param boolean $guard_attributes Set to true to guard protected/non-accessible attributes
 	 * @return Model
 	 */
-	public static function create($attributes, $validate=true)
+	public static function create($attributes, $validate=true, $guard_attributes=true)
 	{
 		$class_name = get_called_class();
-		$model = new $class_name($attributes);
+		$model = new $class_name($attributes, $guard_attributes);
 		$model->save($validate);
 		return $model;
 	}
@@ -844,8 +845,8 @@ class Model
 				$this->attributes[$pk] = static::connection()->insert_id($table->sequence);
 		}
 
-		$this->invoke_callback('after_create',false);
 		$this->__new_record = false;
+		$this->invoke_callback('after_create',false);
 		return true;
 	}
 
@@ -1051,13 +1052,15 @@ class Model
 	 * @return boolean True if passed validators otherwise false
 	 */
 	private function _validate()
-	{	
+	{
 		$config = Config::instance();
 
 		$validator_class = $config->get_validator();
+        if ($validator_class == '\ActiveRecord\Validations')
+            require_once 'Validations.php';
 
 		$validator = new $validator_class($this);
-
+		
 		$validation_on = 'validation_on_' . ($this->is_new_record() ? 'create' : 'update');
 
 		foreach (array('before_validation', "before_$validation_on") as $callback)

@@ -1,6 +1,5 @@
 <?php
-include 'helpers/config.php';
-require __DIR__ . '/../lib/ActiveRecord/Serialization.php';
+require_once __DIR__ . '/../lib/Serialization.php';
 
 use ActiveRecord\DateTime;
 
