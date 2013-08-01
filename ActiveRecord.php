@@ -7,23 +7,22 @@ define('PHP_ACTIVERECORD_VERSION_ID','1.0');
 if (!defined('PHP_ACTIVERECORD_AUTOLOAD_PREPEND'))
 	define('PHP_ACTIVERECORD_AUTOLOAD_PREPEND',true);
 
-require __DIR__.'/lib/Singleton.php';
-require __DIR__.'/lib/Config.php';
-require __DIR__.'/lib/Utils.php';
-require __DIR__.'/lib/DateTime.php';
-require __DIR__.'/lib/Model.php';
-require __DIR__.'/lib/Table.php';
-require __DIR__.'/lib/ConnectionManager.php';
-require __DIR__.'/lib/Connection.php';
-require __DIR__.'/lib/SQLBuilder.php';
-require __DIR__.'/lib/Reflections.php';
-require __DIR__.'/lib/Inflector.php';
-require __DIR__.'/lib/CallBack.php';
-require __DIR__.'/lib/Exceptions.php';
-require __DIR__.'/lib/Cache.php';
-require __DIR__.'/lib/OptionBinder.php';
-require __DIR__.'/lib/Query.php';
-require __DIR__.'/lib/Scope.php';
+require __DIR__.'/lib/ActiveRecord/Singleton.php';
+require __DIR__.'/lib/ActiveRecord/Config.php';
+require __DIR__.'/lib/ActiveRecord/Utils.php';
+require __DIR__.'/lib/ActiveRecord/DateTime.php';
+require __DIR__.'/lib/ActiveRecord/Model.php';
+require __DIR__.'/lib/ActiveRecord/Table.php';
+require __DIR__.'/lib/ActiveRecord/ConnectionManager.php';
+require __DIR__.'/lib/ActiveRecord/Connection.php';
+require __DIR__.'/lib/ActiveRecord/SQLBuilder.php';
+require __DIR__.'/lib/ActiveRecord/Reflections.php';
+require __DIR__.'/lib/ActiveRecord/Inflector.php';
+require __DIR__.'/lib/ActiveRecord/CallBack.php';
+require __DIR__.'/lib/ActiveRecord/Exceptions.php';
+require __DIR__.'/lib/ActiveRecord/OptionBinder.php';
+require __DIR__.'/lib/ActiveRecord/Query.php';
+require __DIR__.'/lib/ActiveRecord/Scope.php';
 
 if (!defined('PHP_ACTIVERECORD_AUTOLOAD_DISABLE'))
 	spl_autoload_register('activerecord_autoload',false,PHP_ACTIVERECORD_AUTOLOAD_PREPEND);
