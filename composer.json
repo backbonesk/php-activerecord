@@ -13,8 +13,8 @@
             "ActiveRecord": "lib/"
         },
         "files": [
-            "lib/Utils.php",
-            "lib/Exceptions.php"
+            "lib/ActiveRecord/Utils.php",
+            "lia/ActiveRecord/Exceptions.php"
         ]
     }
 }
