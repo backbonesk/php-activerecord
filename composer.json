@@ -14,7 +14,7 @@
         },
         "files": [
             "lib/ActiveRecord/Utils.php",
-            "lia/ActiveRecord/Exceptions.php"
+            "lib/ActiveRecord/Exceptions.php"
         ]
     }
 }
