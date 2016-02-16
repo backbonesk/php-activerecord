@@ -456,8 +456,16 @@ class Model
 		if ($value instanceof DateTime)
 			$value->attribute_of($this,$name);
 
+		if (array_key_exists($name,$this->attributes)) {
+			if ($this->attributes[$name] != $value) {
+				$this->flag_dirty($name);
+			}
+		}
+		else {
+			$this->flag_dirty($name);
+		}
+
 		$this->attributes[$name] = $value;
-		$this->flag_dirty($name);
 		return $value;
 	}
 
