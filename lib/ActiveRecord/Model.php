@@ -469,8 +469,13 @@ class Model
 		if ($value instanceof DateTime)
 			$value->attribute_of($this,$name);
 
+		// set attribute as dirty only if value have changed or if is not defined yet
+		$attributeExists = array_key_exists($name, $this->attributes);
+		if (!$attributeExists || ($attributeExists && $this->attributes[$name] != $value)) {
+			$this->flag_dirty($name);
+		}
+
 		$this->attributes[$name] = $value;
-		$this->flag_dirty($name);
 		return $value;
 	}
 
