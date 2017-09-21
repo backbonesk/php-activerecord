@@ -127,25 +127,24 @@ class DateTime extends \DateTime
 	public function setDate($year, $month, $day)
 	{
 		$this->flag_dirty();
-		call_user_func_array(array($this,'parent::setDate'),func_get_args());
+		return parent::setDate($year, $month, $day);
 	}
 
-	public function setISODate($year, $week , $day=null)
+	public function setISODate($year, $week, $day = 1)
 	{
 		$this->flag_dirty();
-		call_user_func_array(array($this,'parent::setISODate'),func_get_args());
+		return parent::setISODate($year, $week, $day);
 	}
 
-	public function setTime($hour, $minute, $second=null)
+	public function setTime($hour, $minute, $second = null, $microseconds = null)
 	{
 		$this->flag_dirty();
-		call_user_func_array(array($this,'parent::setTime'),func_get_args());
+		return parent::setTime($hour, $minute, $second, $microseconds);
 	}
 
 	public function setTimestamp($unixtimestamp)
 	{
 		$this->flag_dirty();
-		call_user_func_array(array($this,'parent::setTimestamp'),func_get_args());
+		return parent::setTimestamp($unixtimestamp);
 	}
 }
-?>
