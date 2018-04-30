@@ -341,20 +341,16 @@ class Model
 	 */
 	public function __isset($attribute_name)
 	{
-        if (array_key_exists($attribute_name,$this->attributes) || array_key_exists($attribute_name,static::$alias_attribute)) 
-        {
-   	       return true;
-   	    }
+		if (array_key_exists($attribute_name,$this->attributes) || array_key_exists($attribute_name,static::$alias_attribute))
+			return true;
 
-   	    try 
-   	    {
-   	    	$this->__get($attribute_name);
-   	        return true;
-   	    } 
-   	    	catch (UndefinedPropertyException $e) {
-   	        return false;
-   	    }
-		// return array_key_exists($attribute_name,$this->attributes) || array_key_exists($attribute_name,static::$alias_attribute);
+		try
+		{
+			$this->__get($attribute_name);
+			return true;
+		} catch (UndefinedPropertyException $e) {
+			return false;
+		}
 	}
 
 	/**
@@ -469,8 +465,11 @@ class Model
 		if ($value instanceof DateTime)
 			$value->attribute_of($this,$name);
 
-		$this->attributes[$name] = $value;
-		$this->flag_dirty($name);
+		if ($this->attributes[$name] != $value)) {
+			$this->attributes[$name] = $value;
+			$this->flag_dirty($name);
+		}
+
 		return $value;
 	}
 
@@ -1051,7 +1050,7 @@ class Model
 	 * @return boolean True if passed validators otherwise false
 	 */
 	private function _validate()
-	{	
+	{
 		$config = Config::instance();
 
 		$validator_class = $config->get_validator();
@@ -1599,7 +1598,7 @@ class Model
 		{
 			$last_query = static::table()->conn->last_query;
 
-			throw new RecordNotFound("Couldnt find any records for $class. Tried with query: $last_query");	
+			throw new RecordNotFound("Couldnt find any records for $class. Tried with query: $last_query");
 		}
 
 		return $single ? (!empty($list) ? $list[0] : null) : $list;

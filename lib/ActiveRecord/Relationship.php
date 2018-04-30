@@ -516,7 +516,7 @@ class HasMany extends AbstractRelationship
 				$fk = $this->foreign_key;
 
 				$this->set_keys($this->get_table()->class->getName(), true);
-				
+
 				$class = $this->class_name;
 				$relation = $class::table()->get_relationship($this->through);
 				$through_table = $relation->get_table();
