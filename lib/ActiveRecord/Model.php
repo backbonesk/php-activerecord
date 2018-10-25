@@ -466,7 +466,7 @@ class Model
 			$value->attribute_of($this,$name);
 
 		$attribute_exists = array_key_exists($name,$this->attributes);
-		if (!$attribute_exists || ($attribute_exists && $this->attributes[$name] != $value)) {
+		if (!$attribute_exists || ($attribute_exists && $this->attributes[$name] !== $value)) {
 			$this->flag_dirty($name);
 		}
 
