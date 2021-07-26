@@ -675,6 +675,9 @@ class Model
 	 */
 	private function is_delegated($name, &$delegate)
 	{
+		if (!is_array($delegate))
+			return null;
+
 		if ($delegate['prefix'] != '')
 			$name = substr($name,strlen($delegate['prefix'])+1);
 
