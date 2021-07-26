@@ -166,8 +166,11 @@ class Utils
 		return is_array(end($options)) ? end($options) : array();
 	}
 
-	public static function add_condition(&$conditions=array(), $condition, $conjuction='AND')
+	public static function add_condition(&$conditions, $condition, $conjuction='AND')
 	{
+		if (empty($conditions)) {
+			$conditions = array();
+		}
 		if (is_array($condition))
 		{
 			if (empty($conditions))
