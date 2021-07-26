@@ -555,8 +555,15 @@ class HasMany extends AbstractRelationship
 		return parent::create_association($model, $attributes);
 	}
 
-	public function load_eagerly($models=array(), $attributes=array(), $includes, Table $table)
+	public function load_eagerly($models, $attributes, $includes, Table $table)
 	{
+		if (empty($models))
+		{
+			$models = array();
+		}
+		if (empty($attributes)) {
+			$attributes = array();
+		}
 		$this->set_keys($table->class->name);
 		$this->query_and_attach_related_models_eagerly($table,$models,$attributes,$includes,$this->foreign_key, $table->pk);
 	}
@@ -677,8 +684,12 @@ class BelongsTo extends AbstractRelationship
 		return $class::first($options, 'is_relationship');
 	}
 
-	public function load_eagerly($models=array(), $attributes, $includes, Table $table)
+	public function load_eagerly($models, $attributes, $includes, Table $table)
 	{
+		if (empty($models))
+		{
+			$models = array();
+		}
 		$this->query_and_attach_related_models_eagerly($table,$models,$attributes,$includes, $this->primary_key,$this->foreign_key);
 	}
 };
