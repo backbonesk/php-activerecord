@@ -678,7 +678,7 @@ class BelongsTo extends AbstractRelationship
 		if (!$this->class_name)
 			$this->set_inferred_class_name();
 		
-		if ($this->primary_key === '') {
+		if ($this->primary_key == '') {
 			$this->__get('primary_key');
 		}
 
@@ -689,7 +689,7 @@ class BelongsTo extends AbstractRelationship
 
 	public function __get($name)
 	{
-		if($name === 'primary_key' && $this->primary_key === '') {
+		if($name === 'primary_key' && $this->primary_key == '') {
 			$this->primary_key = array(Table::load($this->class_name)->pk[0]);
 		}
 
