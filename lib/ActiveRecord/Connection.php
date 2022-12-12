@@ -495,7 +495,7 @@ abstract class Connection
 		$date = date_create($string);
 		$errors = \DateTime::getLastErrors();
 
-		if ($errors['warning_count'] > 0 || $errors['error_count'] > 0)
+		if (is_array($errors) && isset($errors['warning_count']) && ($errors['warning_count'] > 0 || $errors['error_count'] > 0))
 			return null;
 
 		return new DateTime($date->format('Y-m-d H:i:s T'));
