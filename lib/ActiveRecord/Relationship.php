@@ -37,6 +37,13 @@ abstract class AbstractRelationship implements InterfaceRelationship
 	 * @var string
 	 */
 	public $class_name;
+	
+	/**
+	 * Name of the public key.
+	 *
+	 * @var string
+	 */
+	public $public_key;
 
 	/**
 	 * Name of the foreign key.
@@ -664,8 +671,6 @@ class HasAndBelongsToMany extends AbstractRelationship
  */
 class BelongsTo extends AbstractRelationship
 {
-	protected $primary_key;
-	
 	public function __construct($options=array())
 	{
 		parent::__construct($options);
