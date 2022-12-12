@@ -39,13 +39,6 @@ abstract class AbstractRelationship implements InterfaceRelationship
 	public $class_name;
 	
 	/**
-	 * Name of the public key.
-	 *
-	 * @var string
-	 */
-	protected $primary_key;
-
-	/**
 	 * Name of the foreign key.
 	 *
 	 * @var string
@@ -671,12 +664,23 @@ class HasAndBelongsToMany extends AbstractRelationship
  */
 class BelongsTo extends AbstractRelationship
 {
+	/**
+	 * Name of the primary key.
+	 *
+	 * @var string
+	 */
+	protected $primary_key;	
+	
 	public function __construct($options=array())
 	{
 		parent::__construct($options);
 
 		if (!$this->class_name)
 			$this->set_inferred_class_name();
+		
+		if ($this->primary_key === '') {
+			$this->__get('primary_key');
+		}
 
 		//infer from class_name
 		if (!$this->foreign_key)
@@ -685,7 +689,7 @@ class BelongsTo extends AbstractRelationship
 
 	public function __get($name)
 	{
-		if($name === 'primary_key' && !isset($this->primary_key)) {
+		if($name === 'primary_key' && $this->primary_key === '') {
 			$this->primary_key = array(Table::load($this->class_name)->pk[0]);
 		}
 
