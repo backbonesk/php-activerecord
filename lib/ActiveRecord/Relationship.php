@@ -43,7 +43,7 @@ abstract class AbstractRelationship implements InterfaceRelationship
 	 *
 	 * @var string
 	 */
-	public $public_key;
+	public $primary_key;
 
 	/**
 	 * Name of the foreign key.
