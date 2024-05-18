@@ -514,7 +514,7 @@ class HasMany extends AbstractRelationship
 		// since through relationships depend on other relationships we can't do
 		// this initiailization in the constructor since the other relationship
 		// may not have been created yet and we only want this to run once
-		if (!isset($this->initialized))
+		if (!$this->initialized)
 		{
 			if ($this->through)
 			{
