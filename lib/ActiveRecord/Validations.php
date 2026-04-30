@@ -624,6 +624,7 @@ class Validations
  *
  * @package ActiveRecord
  */
+#[\AllowDynamicProperties]
 class Errors implements IteratorAggregate
 {
 	private $model;
