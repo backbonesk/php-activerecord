@@ -664,6 +664,7 @@ class HasAndBelongsToMany extends AbstractRelationship
  * @see valid_association_options
  * @see http://www.phpactiverecord.org/guides/associations
  */
+#[\AllowDynamicProperties]
 class BelongsTo extends AbstractRelationship
 {
 	/**
