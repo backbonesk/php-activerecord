@@ -45,6 +45,7 @@ class Validations
 	private $options = array();
 	private $validators = array();
 	private $record;
+	private $klass;
 
 	private static $VALIDATION_FUNCTIONS = array(
 		'validates_presence_of',
@@ -570,7 +571,7 @@ class Validations
 		{
 			$options = array_merge($configuration, $attr);
 			$pk = $this->model->get_primary_key();
-			$pk_value = $this->model->$pk[0];
+			$pk_value = $this->model->{$pk[0]};
 
 			if (is_array($options[0]))
 			{

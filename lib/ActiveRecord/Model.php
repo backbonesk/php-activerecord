@@ -424,7 +424,7 @@ class Model
 		foreach (static::$delegate as &$item)
 		{
 			if (($delegated_name = $this->is_delegated($name,$item)))
-				return $this->$item['to']->$delegated_name = $value;
+				return $this->{$item['to']}->$delegated_name = $value;
 		}
 
 		throw new UndefinedPropertyException(get_called_class(),$name);
@@ -1443,7 +1443,7 @@ class Model
 			if (is_hash($args[0]))
 				$options['conditions'] = $args[0];
 			else
-				$options['conditions'] = call_user_func_array('static::pk_conditions',$args);
+				$options['conditions'] = static::pk_conditions(...$args);
 		}
 
 		$table = static::table();

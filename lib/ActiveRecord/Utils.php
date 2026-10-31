@@ -69,7 +69,7 @@ function is_hash(&$array)
 		return false;
 
 	$keys = array_keys($array);
-	return @is_string($keys[0]) ? true : false;
+	return isset($keys[0]) && is_string($keys[0]);
 }
 
 /**
@@ -216,7 +216,7 @@ class Utils
 
 	public static function is_blank($var)
 	{
-		return 0 === strlen($var);
+		return 0 === strlen((string) $var);
 	}
 
 	private static $plural = array(
