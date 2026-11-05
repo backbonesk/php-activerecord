@@ -101,3 +101,9 @@ CREATE TABLE user_newsletters(
 
 -- reproduces issue GH-96 for testing
 CREATE INDEX user_newsletters_id_and_user_id_idx ON user_newsletters USING btree(id, user_id);
+
+CREATE TABLE valuestore (
+  id serial primary key,
+  key varchar(20) NOT NULL DEFAULT '',
+  value varchar(255) NOT NULL DEFAULT ''
+);
