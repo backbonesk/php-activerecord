@@ -16,6 +16,25 @@ Every release is a git tag on `master` (semantic versioning). Require a tag in y
 
 ## Releases
 
+### 1.1.2 (05.11.2026)
+ - **Fixed**: PHP 8.1+ deprecations on `null` values: `Connection::instance()` without a connection name (the
+   default connection, `strpos`), `validates_length_of` (`strlen`) and `validates_inclusion_of` (`str_replace`)
+   on a `null` attribute, `SQLBuilder::reverse_order(null)` (`trim`), `Config::get_connection(null)`
+   (`array_key_exists`, PHP 8.5) ([`01ef1a5`](https://github.com/backbonesk/php-activerecord/commit/01ef1a5))
+ - **Fixed**: joining several relationships to the same table no longer triggers "Increment on type bool"
+   (PHP 8.3+) ([`01ef1a5`](https://github.com/backbonesk/php-activerecord/commit/01ef1a5))
+ - **Fixed**: `SQLBuilder::create_conditions_from_underscored_string()` with `null` instead of an array of values
+   no longer throws a `TypeError` ([`01ef1a5`](https://github.com/backbonesk/php-activerecord/commit/01ef1a5))
+ - **Fixed**: `lib/ActiveRecord.php` loads its files with `require_once`; together with the Composer autoloader
+   (`Utils.php`, `Exceptions.php`) it used to fail with "Cannot redeclare function"
+   ([`01ef1a5`](https://github.com/backbonesk/php-activerecord/commit/01ef1a5))
+ - **Fixed**: `Config::set_logger(null)` removes the logger instead of throwing `ReflectionException`; a
+   connection logs only when a logger is set (`set_logging(true)` without a logger used to fail on
+   `null->log()`) ([`01ef1a5`](https://github.com/backbonesk/php-activerecord/commit/01ef1a5))
+ - **Added**: the test suite runs on PHPUnit 10.5 / 11.5 (`composer test`, `phpunit.xml.dist`), verified on
+   MySQL/MariaDB, PostgreSQL and SQLite with PHP 8.5; tests outdated by the fork's deliberate changes were updated
+   ([`d281e11`](https://github.com/backbonesk/php-activerecord/commit/d281e11))
+
 ### 1.1.1 (05.11.2026)
  - **Fixed**: `validates_uniqueness_of` quotes column names, including the primary key, the same way `SQLBuilder`
    quotes hash conditions. A column named with a reserved word (`key`, `order`) used to fail with SQL error 1064 on

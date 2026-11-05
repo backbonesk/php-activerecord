@@ -184,9 +184,24 @@ rather than a branch.
 
 ## Tests
 
-The test suite in `test/` comes from upstream and is written for legacy PHPUnit (3.x, PEAR layout). It is not
-runnable with current PHPUnit releases yet. Connection strings for the test databases are taken from the
-`PHPAR_MYSQL`, `PHPAR_PGSQL`, `PHPAR_OCI` and `PHPAR_SQLITE` environment variables (see `test/helpers/config.php`).
+The test suite in `test/` (based on the upstream suite) runs on PHPUnit 10.5 / 11.5, which requires PHP 8.1+ for
+development; the library itself still supports PHP 7.1+. Run it from the repository root:
+
+    composer install
+    PHPAR_MYSQL='mysql://root@127.0.0.1/test' PHPAR_PGSQL='pgsql://user@127.0.0.1/test' composer test
+
+Each database gets its tables (re)created on the first test, so point the variables at empty, disposable
+databases. Connection strings are taken from these environment variables (defaults in `test/helpers/config.php`):
+
+| Variable       | Default                            |
+|----------------|------------------------------------|
+| `PHPAR_MYSQL`  | `mysql://root@127.0.0.1/test`      |
+| `PHPAR_PGSQL`  | `pgsql://test:test@127.0.0.1/test` |
+| `PHPAR_OCI`    | `oci://test:test@127.0.0.1/dev`    |
+| `PHPAR_SQLITE` | `sqlite://test.db` (working dir)   |
+
+Tests of an unreachable database or a missing extension (Memcache, Memcached, APC, OCI8) are skipped. A single
+test file runs with e.g. `vendor/bin/phpunit test/ValidationsTest.php`.
 
 ## License
 
