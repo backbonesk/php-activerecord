@@ -587,18 +587,23 @@ class Validations
 			$sql = "";
 			$conditions = array("");
 
+			// quote column names (reserved words like `key`, `order`) the same
+			// way SQLBuilder does for hash conditions
+			$connection = $this->model->connection();
+			$pk_quoted = $connection->quote_name($pk[0]);
+
 			if ($pk_value === null)
-				$sql = "{$pk[0]} is not null";
+				$sql = "{$pk_quoted} is not null";
 			else
 			{
-				$sql = "{$pk[0]}!=?";
+				$sql = "{$pk_quoted}!=?";
 				array_push($conditions,$pk_value);
 			}
 
 			foreach ($fields as $field)
 			{
 				$field = $this->model->get_real_attribute_name($field);
-				$sql .= " and {$field}=?";
+				$sql .= " and {$connection->quote_name($field)}=?";
 				array_push($conditions,$this->model->$field);
 			}
 
