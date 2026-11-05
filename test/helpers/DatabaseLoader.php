@@ -101,7 +101,7 @@ class DatabaseLoader
 	public function load_fixture_data($table)
 	{
 		$fp = fopen(__DIR__ . "/../fixtures/$table.csv",'r');
-		$fields = fgetcsv($fp);
+		$fields = fgetcsv($fp, null, ',', '"', '\\');
 
 		if (!empty($fields))
 		{
@@ -113,7 +113,7 @@ class DatabaseLoader
 
 			$fields = join(',',$fields);
 
-			while (($values = fgetcsv($fp)))
+			while (($values = fgetcsv($fp, null, ',', '"', '\\')))
 				$this->db->query("INSERT INTO $table($fields) VALUES($markers)",$values);
 		}
 		fclose($fp);

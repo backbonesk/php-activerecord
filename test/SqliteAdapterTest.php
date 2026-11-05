@@ -9,11 +9,11 @@ class SqliteAdapterTest extends AdapterTest
 		parent::set_up('sqlite');
 	}
 
-	public function tearDown()
+	protected function tearDown(): void
 	{
 		parent::tearDown();
 
-		@unlink($this->db);
+		// keep $this->db: the schema is created once per run (DatabaseLoader)
 		@unlink(self::InvalidDb);
 	}
 
@@ -58,7 +58,5 @@ class SqliteAdapterTest extends AdapterTest
 		$this->assert_true($columns['id']->auto_increment);
 	}
 
-	// not supported
-	public function test_connect_with_port() {}
 }
 ?>

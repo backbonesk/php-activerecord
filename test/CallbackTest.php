@@ -47,19 +47,17 @@ class CallBackTest extends DatabaseTest
 		$this->assert_has_callback('after_construct','non_generic_after_construct');
 	}
 
-	/**
-	 * @expectedException ActiveRecord\ActiveRecordException
-	 */
 	public function test_register_invalid_callback()
 	{
+		$this->expectException('ActiveRecord\ActiveRecordException');
+
 		$this->callback->register('invalid_callback');
 	}
 
-	/**
-	 * @expectedException ActiveRecord\ActiveRecordException
-	 */
 	public function test_register_callback_with_undefined_method()
 	{
+		$this->expectException('ActiveRecord\ActiveRecordException');
+
 		$this->callback->register('after_construct','do_not_define_me');
 	}
 
@@ -72,6 +70,7 @@ class CallBackTest extends DatabaseTest
 	public function test_register_with_closure()
 	{
 		$this->callback->register('after_construct',function($mode) { });
+		$this->assert_has_callback('after_construct');
 	}
 
 	public function test_register_with_null_definition()
@@ -111,11 +110,10 @@ class CallBackTest extends DatabaseTest
 		$this->assert_has_callback('before_destroy','before_destroy_using_string');
 	}
 
-	/**
-	 * @expectedException ActiveRecord\ActiveRecordException
-	 */
 	public function test_register_via_static_with_invalid_definition()
 	{
+		$this->expectException('ActiveRecord\ActiveRecordException');
+
 		$class_name = "Venues_" . md5(uniqid());
 		eval("class $class_name extends ActiveRecord\\Model { static \$table_name = 'venues'; static \$after_save = 'method_that_does_not_exist'; };");
 		new $class_name();
@@ -149,7 +147,7 @@ class CallBackTest extends DatabaseTest
 
 	public function test_invoke_runs_all_callbacks()
 	{
-		$mock = $this->get_mock('VenueCB',array('after_destroy_one','after_destroy_two'));
+		$mock = $this->getMockBuilder('VenueCB')->onlyMethods(array('after_destroy_one','after_destroy_two'))->getMock();
 		$mock->expects($this->once())->method('after_destroy_one');
 		$mock->expects($this->once())->method('after_destroy_two');
 		$this->callback->invoke($mock,'after_destroy');
@@ -171,13 +169,11 @@ class CallBackTest extends DatabaseTest
 		$this->assert_implicit_save('after_save','after_update');
 	}
 
-	/**
-	 * @expectedException ActiveRecord\ActiveRecordException
-	 */
 	public function test_invoke_unregistered_callback()
 	{
-		$mock = $this->get_mock('VenueCB', array('columns'));
-		$this->callback->invoke($mock,'before_validation_on_create');
+		$this->expectException('ActiveRecord\ActiveRecordException');
+
+		$this->callback->invoke(new VenueCB(),'before_validation_on_create');
 	}
 
 	public function test_before_callbacks_pass_on_false_return_callback_returned_false()
