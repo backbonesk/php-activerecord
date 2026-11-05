@@ -1,3 +1,71 @@
+Fork BACKBONE (backbone/php-activerecord). Zaznamy od 1.1.0 su po slovensky, starsie
+su povodne z upstreamu (kla/php-activerecord). Vetvy: development (vyvoj), master
+(iba cez PR z development, tagy), legacy-php7 (povodny master pred PHP 8).
+
+Version 1.1.1 - 5. november 2026
+
+Opravy:
+
+- db6134b validates_uniqueness_of obaluje nazvy stlpcov aj primarneho kluca uvodzovkami
+  rovnako ako hash podmienky v SQLBuilderi; stlpec s rezervovanym slovom (key, order)
+  predtym na MySQL/MariaDB koncil SQL chybou 1064 uz pri ulozeni zaznamu (prevzate
+  z upstream 99904dc, ktore bolo iba v legacy-php7); test s tabulkou valuestore
+
+Version 1.1.0 - 5. november 2026
+
+Prva verzia s podporou PHP 8.x (8.1 az 8.5), minimalna verzia PHP je 7.1. Obsahuje
+vsetky upravy forku od 1.0 (vetva php82, predtym dev).
+
+Zmeny oproti upstreamu (fork od 2013):
+
+- 8bb4966 Model::find() (first, last, all) a find_by_*/find_all_by_* pri prazdnom
+  vysledku vyhadzuju RecordNotFound (upstream vracia null / prazdne pole);
+  find_or_create_by_* vynimku zachyti a zaznam vytvori
+- 8bb4966, f693bcb lazy nacitane vztahy (belongs_to, has_one, has_many) pri chybajucom
+  zazname vracaju null / prazdne pole namiesto vynimky
+- 13c7a24 profilovanie dotazov - log obsahuje aj trvanie dotazu
+- 4796087 vlastna trieda validacii cez Config::set_validator()
+- e4c3f89 isset($model->x) skusa aj magicke gettery
+- 75eb052 chybna trieda vo vztahu (Reflection) skonci citatelnou chybou
+- c5acfad struktura suborov podla PSR-0 (lib/ActiveRecord), composer autoload
+- 132b0d6 balik premenovany na backbone/php-activerecord
+
+Opravy:
+
+- 54c3939 datetime_to_string() bez casovej zony (Y-m-d H:i:s) - MariaDB/MySQL v strict
+  sql_mode hodnotu s 'T' odmietali (chyba 1292)
+- 3a21b5c nacitanie vztahov has_many s through
+- 9985b94 PgsqlAdapter nepouziva pg_attrdef.adsrc (neexistuje od PostgreSQL 12)
+- 6b534d5 find_by_pk() so skalarnou hodnotou (PHP 8: count() na skalar)
+- 78eb892 atribut je dirty iba pri zmene hodnoty aj typu (!==)
+- 00325f2, f5d94d5 atribut sa oznaci ako dirty iba vtedy, ked sa hodnota naozaj zmenila
+- 401f4d3 DateTime - kompatibilita s PHP 7.1
+
+Kompatibilita s PHP:
+
+- cced8d0 PHP 8.5 (vlastnosti v retazcoch s {}, static:: callable, nedeklarovany $klass,
+  fputcsv escape, strlen(null) v Utils/Expressions, is_hash)
+- 9046a5d, 756eb65, a3243e3 PHP 8.0/7.4 deprecations (implode, spl_autoload_register,
+  (double))
+- 99f34ff, 65f4768, c43985c, d8a7d0c PHP 8.4 (explicitne nullable typy,
+  AllowDynamicProperties, navratovy typ Errors::getIterator)
+- a120b4a AllowDynamicProperties pre PHP 8.2+
+- 268e441 az 6f96726 PHP 8.2
+- 1d14161, d77aa36 PHP 8.1
+- a15d12d, ed2a42f PHP 8.0 (povinny parameter za volitelnym, private final metody)
+- 09cc57f PHP 7.4
+- 57d434c minimalna verzia PHP >=7.1
+
+Upstream zmeny medzi 1.0 a forkom (2010-2012, kla/php-activerecord), vyber:
+
+- cache schemy tabuliek a modelov (Memcache, Memcached, APC), namespace pre cache
+- SqliteAdapter, opravy PgsqlAdapter, ?charset= v connection stringu
+- eager loading - respektuje volby vztahov, namespace v has_many through
+- Model::query(), reestablish_connection(), attribute_is_dirty(), validate()
+- update_all()/delete_all() s limit/order (MySQL, SQLite)
+- serializacia to_csv a to_array, Errors::to_array()
+- assign_attribute pre stlpce s inym inflected nazvom (velke pismena)
+
 Version 1.0 - June 27, 2010
 
 - d2bed65 fixed an error with eager loading when no records exist
