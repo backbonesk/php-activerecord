@@ -1,17 +1,17 @@
 <?php
 /**
- * In order to run these unit tests, you need to install:
- *  - PHPUnit
- *  - PEAR Log (otherwise logging SQL queries will be disabled)
- *  - Memcache (otherwise Caching tests will not be executed)
- *  
- * To run all tests : phpunit AllTests.php --slow-tests
- * To run a specific test : phpunit ????Test.php 
+ * Run from the repository root after `composer install`:
+ *  - all tests: vendor/bin/phpunit
+ *  - one test:  vendor/bin/phpunit test/ValidationsTest.php
+ *
+ * Connection strings come from PHPAR_MYSQL, PHPAR_PGSQL, PHPAR_OCI and
+ * PHPAR_SQLITE; tests of an unreachable database are skipped. Optional:
+ * PEAR Log (SQL logging tests), Memcache/Memcached/APC (cache tests).
  */
 
 @include_once 'Log.php';
 @include_once 'Log/file.php';
-require_once 'PHPUnit/Framework/TestCase.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 require_once 'SnakeCase_PHPUnit_Framework_TestCase.php';
 require_once 'DatabaseTest.php';
 require_once 'AdapterTest.php';
@@ -72,5 +72,5 @@ ActiveRecord\Config::initialize(function($cfg)
 	$GLOBALS['show_warnings_done'] = true;
 });
 
-error_reporting(E_ALL | E_STRICT);
+error_reporting(E_ALL);
 ?>

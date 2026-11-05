@@ -4,6 +4,9 @@ require_once 'DatabaseLoader.php';
 class DatabaseTest extends SnakeCase_PHPUnit_Framework_TestCase
 {
 	protected $conn;
+	protected $db;
+	protected $connection_name;
+	protected $original_default_connection;
 	public static $log = false;
 
 	public function set_up($connection_name=null)

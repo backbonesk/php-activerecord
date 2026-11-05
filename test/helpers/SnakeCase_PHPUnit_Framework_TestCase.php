@@ -1,25 +1,33 @@
 <?php
-class SnakeCase_PHPUnit_Framework_TestCase extends PHPUnit_Framework_TestCase
+#[\AllowDynamicProperties]
+class SnakeCase_PHPUnit_Framework_TestCase extends PHPUnit\Framework\TestCase
 {
+	// PHPUnit 3.x names used by the tests
+	private static $renamed = array(
+		'setExpectedException' => 'expectException',
+		'assertRegExp' => 'assertMatchesRegularExpression',
+	);
+
 	public function __call($meth, $args)
 	{
 		$camel_cased_method = ActiveRecord\Inflector::instance()->camelize($meth);
 
+		if (isset(self::$renamed[$camel_cased_method]))
+			$camel_cased_method = self::$renamed[$camel_cased_method];
+
 		if (method_exists($this, $camel_cased_method))
 			return call_user_func_array(array($this, $camel_cased_method), $args);
 
-		$class_name = get_called_class();
-		$trace = debug_backtrace();
-		die("PHP Fatal Error:  Call to undefined method $class_name::$meth() in {$trace[1]['file']} on line {$trace[1]['line']}" . PHP_EOL);
+		throw new BadMethodCallException('Call to undefined method ' . get_called_class() . "::$meth()");
 	}
 
-	public function setUp()
+	protected function setUp(): void
 	{
 		if (method_exists($this,'set_up'))
 			call_user_func_array(array($this,'set_up'),func_get_args());
 	}
 
-	public function tearDown()
+	protected function tearDown(): void
 	{
 		if (method_exists($this,'tear_down'))
 			call_user_func_array(array($this,'tear_down'),func_get_args());
@@ -49,6 +57,14 @@ class SnakeCase_PHPUnit_Framework_TestCase extends PHPUnit_Framework_TestCase
 
 		foreach ($keys as $name)
 			$this->assert_array_not_has_key($name,$array);
+	}
+
+	public function assert_contains($needle, $haystack, $message = '')
+	{
+		if (is_string($haystack))
+			$this->assertStringContainsString($needle, $haystack, $message);
+		else
+			$this->assertContains($needle, $haystack, $message);
 	}
 
 	public function assert_is_a($expected_class, $object)

@@ -3,4 +3,8 @@
 .settings
 *.log
 test/*.db
+/test.db
 *.swp
+vendor/
+composer.lock
+.phpunit.cache/

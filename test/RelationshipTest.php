@@ -27,7 +27,7 @@ class RelationshipTest extends DatabaseTest
 
 		foreach ($this->relationship_names as $name)
 		{
-			if (preg_match("/$name/", $this->getName(), $match))
+			if (preg_match("/$name/", $this->name(), $match))
 				$this->relationship_name = $match[0];
 		}
 	}
@@ -39,15 +39,15 @@ class RelationshipTest extends DatabaseTest
 
 		switch ($type)
 		{
-			case 'belongs_to';
+			case 'belongs_to':
 				$ret = Event::find(5);
 				break;
 
-			case 'has_one';
+			case 'has_one':
 				$ret = Employee::find(1);
 				break;
 
-			case 'has_many';
+			case 'has_many':
 				$ret = Venue::find(2);
 				break;
 		}
@@ -82,11 +82,10 @@ class RelationshipTest extends DatabaseTest
 		$this->assert_default_has_many($this->get_relationship());
 	}
 
-	/**
-	 * @expectedException ActiveRecord\RelationshipException
-	 */
 	public function test_joins_on_model_via_undeclared_association()
 	{
+		$this->expectException('ActiveRecord\RelationshipException');
+
 		$x = JoinBook::first(array('joins' => array('undeclared')));
 	}
 
@@ -315,11 +314,10 @@ class RelationshipTest extends DatabaseTest
 		$this->assert_true($count >= 5);
 	}
 
-	/**
-	 * @expectedException ActiveRecord\HasManyThroughAssociationException
-	 */
 	public function test_has_many_through_no_association()
 	{
+		$this->expectException('ActiveRecord\HasManyThroughAssociationException');
+
 		Event::$belongs_to = array(array('host'));
 		Venue::$has_many[1] = array('hosts', 'through' => 'blahhhhhhh');
 
@@ -357,11 +355,11 @@ class RelationshipTest extends DatabaseTest
 		$this->assert_true(count($venue->hostess) > 0);
 	}
 
-	/**
-	 * @expectedException ReflectionException
-	 */
 	public function test_has_many_through_with_invalid_class_name()
 	{
+		// the fork wraps the ReflectionException (75eb052)
+		$this->expectException('ActiveRecord\RelationshipException');
+
 		Event::$belongs_to = array(array('host'));
 		Venue::$has_one = array(array('invalid_assoc'));
 		Venue::$has_many[1] = array('hosts', 'through' => 'invalid_assoc');
@@ -493,11 +491,10 @@ class RelationshipTest extends DatabaseTest
 		$this->assert_true(count($venue->hosts) > 0);
 	}
 
-	/**
-	 * @expectedException ActiveRecord\RelationshipException
-	 */
 	public function test_throw_error_if_relationship_is_not_a_model()
 	{
+		$this->expectException('ActiveRecord\RelationshipException');
+
 		AuthorWithNonModelRelationship::first()->books;
 	}
 
@@ -544,7 +541,7 @@ class RelationshipTest extends DatabaseTest
 
 		foreach ($assocs as $assoc)
 		{
-			$this->assert_internal_type('array', $authors[0]->$assoc);
+			$this->assertIsArray($authors[0]->$assoc);
 
 			foreach ($authors[0]->$assoc as $a)
 				$this->assert_equals($authors[0]->author_id,$a->author_id);
@@ -552,7 +549,7 @@ class RelationshipTest extends DatabaseTest
 
 		foreach ($assocs as $assoc)
 		{
-			$this->assert_internal_type('array', $authors[1]->$assoc);
+			$this->assertIsArray($authors[1]->$assoc);
 			$this->assert_true(!empty($authors[1]->$assoc));
 		}
 
@@ -698,11 +695,10 @@ class RelationshipTest extends DatabaseTest
 		$this->assert_equals($event->id, $event->venue->id);
 	}
 
-	/**
-	 * @expectedException ActiveRecord\RecordNotFound
-	 */
 	public function test_dont_attempt_eager_load_when_record_does_not_exist()
 	{
+		$this->expectException('ActiveRecord\RecordNotFound');
+
 		Author::find(999999, array('include' => array('books')));
 	}
 };

@@ -33,11 +33,10 @@ class SQLBuilderTest extends DatabaseTest
 			$this->assert_equals(array(),$cond);
 	}
 
-	/**
-	 * @expectedException ActiveRecord\ActiveRecordException
-	 */
 	public function test_no_connection()
 	{
+		$this->expectException('ActiveRecord\ActiveRecordException');
+
 		new SQLBuilder(null,'authors');
 	}
 
@@ -133,11 +132,10 @@ class SQLBuilderTest extends DatabaseTest
 		$this->assert_sql_has($this->conn->limit("SELECT * FROM authors WHERE id=? GROUP BY name HAVING created_at > '2009-01-01' ORDER BY name",1,10), (string)$this->sql);
 	}
 
-	/**
-	 * @expectedException ActiveRecord\ActiveRecordException
-	 */
 	public function test_insert_requires_hash()
 	{
+		$this->expectException('ActiveRecord\ActiveRecordException');
+
 		$this->sql->insert(array(1));
 	}
 

@@ -266,7 +266,7 @@ class Validations
 			if (!is_array($enum))
 				array($enum);
 
-			$message = str_replace('%s', $var, $options['message']);
+			$message = str_replace('%s', $var === null ? '' : $var, $options['message']);
 
 			if ($this->is_null_with_option($var, $options) || $this->is_blank_with_option($var, $options))
 				continue;
@@ -522,7 +522,7 @@ class Validations
 
 					$message = str_replace('%d', $option, $message);
 					$attribute_value = $this->model->$attribute;
-					$len = strlen($attribute_value);
+					$len = $attribute_value === null ? 0 : strlen($attribute_value);
 					$value = (int)$attr[$range_option];
 
 					if ('maximum' == $range_option && $len > $value)

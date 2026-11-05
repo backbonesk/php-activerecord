@@ -7,22 +7,22 @@ define('PHP_ACTIVERECORD_VERSION_ID','1.0');
 if (!defined('PHP_ACTIVERECORD_AUTOLOAD_PREPEND'))
 	define('PHP_ACTIVERECORD_AUTOLOAD_PREPEND',true);
 
-require __DIR__ . '/ActiveRecord/Singleton.php';
-require __DIR__ . '/ActiveRecord/Config.php';
-require __DIR__ . '/ActiveRecord/Utils.php';
-require __DIR__ . '/ActiveRecord/DateTime.php';
-require __DIR__ . '/ActiveRecord/Model.php';
-require __DIR__ . '/ActiveRecord/Table.php';
-require __DIR__ . '/ActiveRecord/ConnectionManager.php';
-require __DIR__ . '/ActiveRecord/Connection.php';
-require __DIR__ . '/ActiveRecord/SQLBuilder.php';
-require __DIR__ . '/ActiveRecord/Reflections.php';
-require __DIR__ . '/ActiveRecord/Inflector.php';
-require __DIR__ . '/ActiveRecord/CallBack.php';
-require __DIR__ . '/ActiveRecord/Exceptions.php';
-require __DIR__ . '/ActiveRecord/Cache.php';
-require __DIR__ . '/ActiveRecord/Validations.php';
-require __DIR__ . '/ActiveRecord/Relationship.php';
+require_once __DIR__ . '/ActiveRecord/Singleton.php';
+require_once __DIR__ . '/ActiveRecord/Config.php';
+require_once __DIR__ . '/ActiveRecord/Utils.php';
+require_once __DIR__ . '/ActiveRecord/DateTime.php';
+require_once __DIR__ . '/ActiveRecord/Model.php';
+require_once __DIR__ . '/ActiveRecord/Table.php';
+require_once __DIR__ . '/ActiveRecord/ConnectionManager.php';
+require_once __DIR__ . '/ActiveRecord/Connection.php';
+require_once __DIR__ . '/ActiveRecord/SQLBuilder.php';
+require_once __DIR__ . '/ActiveRecord/Reflections.php';
+require_once __DIR__ . '/ActiveRecord/Inflector.php';
+require_once __DIR__ . '/ActiveRecord/CallBack.php';
+require_once __DIR__ . '/ActiveRecord/Exceptions.php';
+require_once __DIR__ . '/ActiveRecord/Cache.php';
+require_once __DIR__ . '/ActiveRecord/Validations.php';
+require_once __DIR__ . '/ActiveRecord/Relationship.php';
 
 if (!defined('PHP_ACTIVERECORD_AUTOLOAD_DISABLE'))
 	spl_autoload_register('activerecord_autoload',true,PHP_ACTIVERECORD_AUTOLOAD_PREPEND);

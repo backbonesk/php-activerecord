@@ -8,11 +8,10 @@ include 'helpers/config.php';
 
 class ConnectionTest extends SnakeCase_PHPUnit_Framework_TestCase
 {
-	/**
-	 * @expectedException ActiveRecord\DatabaseException
-	 */
 	public function test_connection_info_from_should_throw_exception_when_no_host()
 	{
+		$this->expectException('ActiveRecord\DatabaseException');
+
 		ActiveRecord\Connection::parse_connection_url('mysql://user:pass@');
 	}
 
@@ -33,11 +32,10 @@ class ConnectionTest extends SnakeCase_PHPUnit_Framework_TestCase
 		$this->assert_equals('../some/path/to/file.db', $info->host);
 	}
 
-	/**
-	 * @expectedException ActiveRecord\DatabaseException
-	 */
 	public function test_gh_103_sqlite_connection_string_absolute()
 	{
+		$this->expectException('ActiveRecord\DatabaseException');
+
 		$info = ActiveRecord\Connection::parse_connection_url('sqlite:///some/path/to/file.db');
 	}
 
