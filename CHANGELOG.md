@@ -2,7 +2,7 @@
 
 ## Instructions
 
-Fork of [kla/php-activerecord](https://github.com/kla/php-activerecord) maintained by BACKBONE as
+Fork of [kla/php-activerecord](https://github.com/kla/php-activerecord) maintained by BACKBONE, s.r.o. as
 `backbone/php-activerecord`. Entries before the fork are kept as written upstream.
 
 | Branch        | Purpose                                                                  |

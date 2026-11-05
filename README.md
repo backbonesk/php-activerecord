@@ -1,9 +1,9 @@
-# PHP ActiveRecord (BACKBONE fork)
+# PHP ActiveRecord (BACKBONE, s.r.o. fork)
 
-`backbone/php-activerecord` is a maintained fork of [PHP ActiveRecord](https://github.com/kla/php-activerecord)
-by Kien La and Jacques Fuentes. Upstream development stopped after 1.0 (2010). This fork keeps the library running
-on current PHP versions (up to PHP 8.5) and contains a few deliberate differences from upstream, listed
-[below](#differences-from-upstream).
+`backbone/php-activerecord` is a fork of [PHP ActiveRecord](https://github.com/kla/php-activerecord)
+by Kien La and Jacques Fuentes, maintained by BACKBONE, s.r.o. Upstream development stopped after 1.0 (2010).
+This fork keeps the library running on current PHP versions (up to PHP 8.5) and contains a few deliberate
+differences from upstream, listed [below](#differences-from-upstream).
 
 See [CHANGELOG.md](CHANGELOG.md) for release notes.
 
