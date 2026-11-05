@@ -82,7 +82,7 @@ abstract class Connection
 	{
 		$config = Config::instance();
 
-		if (strpos($connection_string_or_connection_name, '://') === false)
+		if (strpos((string) $connection_string_or_connection_name, '://') === false)
 		{
 			$connection_string = $connection_string_or_connection_name ?
 				$config->get_connection($connection_string_or_connection_name) :
@@ -100,8 +100,9 @@ abstract class Connection
 		try {
 			$connection = new $fqclass($info);
 			$connection->protocol = $info->protocol;
-			$connection->logging = $config->get_logging();
-			$connection->logger = $connection->logging ? $config->get_logger() : null;
+			// log only when a logger is set (set_logging(true) alone used to fail on null->log())
+			$connection->logger = $config->get_logging() ? $config->get_logger() : null;
+			$connection->logging = $connection->logger !== null;
 
 			if (isset($info->charset))
 				$connection->set_encoding($info->charset);

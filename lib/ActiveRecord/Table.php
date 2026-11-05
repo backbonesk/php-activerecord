@@ -130,7 +130,7 @@ class Table
 					}
 					else
 					{
-						$existing_tables[$rel->class_name] = true;
+						$existing_tables[$rel->class_name] = 1;
 						$alias = null;
 					}
 

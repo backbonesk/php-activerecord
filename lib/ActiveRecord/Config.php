@@ -159,7 +159,7 @@ class Config extends Singleton
 	 */
 	public function get_connection($name)
 	{
-		if (array_key_exists($name, $this->connections))
+		if (array_key_exists((string) $name, $this->connections))
 			return $this->connections[$name];
 
 		return null;
@@ -236,12 +236,18 @@ class Config extends Singleton
 	/**
 	 * Sets the logger object for future SQL logging
 	 *
-	 * @param object $logger
+	 * @param object|null $logger null removes the logger
 	 * @return void
 	 * @throws ConfigException if Logger objecct does not implement public log()
 	 */
 	public function set_logger($logger)
 	{
+		if ($logger === null)
+		{
+			$this->logger = null;
+			return;
+		}
+
 		$klass = Reflections::instance()->add($logger)->get($logger);
 
 		if (!$klass->getMethod('log') || !$klass->getMethod('log')->isPublic())
