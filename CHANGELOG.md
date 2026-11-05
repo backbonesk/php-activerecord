@@ -1,74 +1,76 @@
 # CHANGELOG
 
-## Inštrukcie
+## Instructions
 
-Fork [kla/php-activerecord](https://github.com/kla/php-activerecord) udržiavaný firmou BACKBONE ako
-`backbone/php-activerecord`. Záznamy od verzie 1.1.0 sú po slovensky, staršie sú pôvodné z upstreamu.
+Fork of [kla/php-activerecord](https://github.com/kla/php-activerecord) maintained by BACKBONE as
+`backbone/php-activerecord`. Entries before the fork are kept as written upstream.
 
-| Vetva         | Účel                                                                    |
-|---------------|-------------------------------------------------------------------------|
-| `development` | vývoj                                                                   |
-| `master`      | vydania - zapisuje sa iba cez PR z `development`, tagy sa robia z neho  |
-| `legacy-php7` | pôvodný `master` pred podporou PHP 8 (bez vydaní)                       |
+| Branch        | Purpose                                                                  |
+|---------------|--------------------------------------------------------------------------|
+| `development` | development                                                              |
+| `master`      | releases - changed only through pull requests from `development`, tagged |
+| `legacy-php7` | the former `master` before PHP 8 support (no releases)                   |
 
-Každá verzia je git tag na `master` (semantické verziovanie). V `composer.json` aplikácie používajte tag
-(napr. `"backbone/php-activerecord": "^1.1"`), nie vetvu.
+Every release is a git tag on `master` (semantic versioning). Require a tag in your application's `composer.json`
+(e.g. `"backbone/php-activerecord": "^1.1"`), not a branch.
 
 ## Releases
 
 ### 1.1.1 (05.11.2026)
- - **Fixed**: `validates_uniqueness_of` obaľuje názvy stĺpcov aj primárneho kľúča úvodzovkami, rovnako ako hash
-   podmienky v `SQLBuilder`. Stĺpec s rezervovaným slovom (`key`, `order`) predtým na MySQL/MariaDB končil SQL
-   chybou 1064 už pri uložení záznamu. Prevzaté z upstream `99904dc`, ktoré bolo iba vo vetve `legacy-php7`;
-   pribudol test s tabuľkou `valuestore` pre mysql/pgsql/sqlite/oci
+ - **Fixed**: `validates_uniqueness_of` quotes column names, including the primary key, the same way `SQLBuilder`
+   quotes hash conditions. A column named with a reserved word (`key`, `order`) used to fail with SQL error 1064 on
+   MySQL/MariaDB as soon as the record was saved. Ported from upstream `99904dc`, which existed only on
+   `legacy-php7`; adds a test with a `valuestore` table for mysql/pgsql/sqlite/oci
    ([`db6134b`](https://github.com/backbonesk/php-activerecord/commit/db6134b))
 
 ### 1.1.0 (05.11.2026)
-Prvá verzia s podporou PHP 8.x (8.1 až 8.5), minimálna verzia PHP je 7.1. Obsahuje všetky úpravy forku od 1.0
-(vetva `php82`, predtým `dev`).
+First release with PHP 8.x support (8.1 to 8.5); the minimum PHP version is 7.1. Contains all changes made in the
+fork since 1.0 (the `php82` branch, formerly `dev`).
 
-#### Odchýlky forku od upstreamu (od 2013)
- - **⚠️ Breaking**: `Model::find()` (`first`, `last`, `all`) aj `find_by_*` / `find_all_by_*` pri prázdnom výsledku
-   vyhadzujú `RecordNotFound` (upstream vracia `null` / prázdne pole); `find_or_create_by_*` výnimku zachytí
-   a záznam vytvorí ([`8bb4966`](https://github.com/backbonesk/php-activerecord/commit/8bb4966))
- - **Changed**: lazy načítané vzťahy (`belongs_to`, `has_one`, `has_many`) pri chýbajúcom zázname vracajú `null` /
-   prázdne pole namiesto výnimky ([`8bb4966`](https://github.com/backbonesk/php-activerecord/commit/8bb4966),
+#### Differences from upstream (since 2013)
+ - **⚠️ Breaking**: `Model::find()` (`first`, `last`, `all`) as well as `find_by_*` / `find_all_by_*` throw
+   `RecordNotFound` when nothing is found (upstream returns `null` / an empty array); `find_or_create_by_*` catches
+   the exception and creates the record ([`8bb4966`](https://github.com/backbonesk/php-activerecord/commit/8bb4966))
+ - **Changed**: lazy-loaded relationships (`belongs_to`, `has_one`, `has_many`) return `null` / an empty array
+   instead of throwing when the related record is missing
+   ([`8bb4966`](https://github.com/backbonesk/php-activerecord/commit/8bb4966),
    [`f693bcb`](https://github.com/backbonesk/php-activerecord/commit/f693bcb))
- - **Changed**: štruktúra súborov podľa PSR-0 (`lib/ActiveRecord`), composer autoload
+ - **Changed**: PSR-0 file layout (`lib/ActiveRecord`), Composer autoloading
    ([`c5acfad`](https://github.com/backbonesk/php-activerecord/commit/c5acfad))
- - **Changed**: balík premenovaný na `backbone/php-activerecord`
+ - **Changed**: package renamed to `backbone/php-activerecord`
    ([`132b0d6`](https://github.com/backbonesk/php-activerecord/commit/132b0d6))
- - **Added**: profilovanie dotazov - log obsahuje aj trvanie dotazu
+ - **Added**: query profiling - the log includes each query's duration
    ([`13c7a24`](https://github.com/backbonesk/php-activerecord/commit/13c7a24))
- - **Added**: vlastná trieda validácií cez `Config::set_validator()`
+ - **Added**: custom validations class via `Config::set_validator()`
    ([`4796087`](https://github.com/backbonesk/php-activerecord/commit/4796087))
- - **Added**: `isset($model->x)` skúša aj magické gettery
+ - **Added**: `isset($model->x)` also tries magic getters
    ([`e4c3f89`](https://github.com/backbonesk/php-activerecord/commit/e4c3f89))
- - **Fixed**: chybná trieda vo vzťahu (Reflection) skončí čitateľnou chybou
+ - **Fixed**: a wrong class name in a relationship (Reflection) ends with a readable error
    ([`75eb052`](https://github.com/backbonesk/php-activerecord/commit/75eb052))
 
-#### Opravy
- - **Fixed**: `datetime_to_string()` bez časovej zóny (`Y-m-d H:i:s`) - MariaDB/MySQL v strict `sql_mode` hodnotu
-   s `T` odmietali (chyba 1292) ([`54c3939`](https://github.com/backbonesk/php-activerecord/commit/54c3939))
- - **Fixed**: načítanie vzťahov `has_many` s `through`
+#### Fixes
+ - **Fixed**: `datetime_to_string()` no longer appends the time zone (`Y-m-d H:i:s`) - MariaDB/MySQL in strict
+   `sql_mode` rejected values with `T` (error 1292)
+   ([`54c3939`](https://github.com/backbonesk/php-activerecord/commit/54c3939))
+ - **Fixed**: loading `has_many` relationships with `through`
    ([`3a21b5c`](https://github.com/backbonesk/php-activerecord/commit/3a21b5c))
- - **Fixed**: `PgsqlAdapter` nepoužíva `pg_attrdef.adsrc` (neexistuje od PostgreSQL 12)
+ - **Fixed**: `PgsqlAdapter` no longer uses `pg_attrdef.adsrc` (removed in PostgreSQL 12)
    ([`9985b94`](https://github.com/backbonesk/php-activerecord/commit/9985b94))
- - **Fixed**: `find_by_pk()` so skalárnou hodnotou (PHP 8: `count()` na skalár)
+ - **Fixed**: `find_by_pk()` with a scalar value (PHP 8: `count()` on a scalar)
    ([`6b534d5`](https://github.com/backbonesk/php-activerecord/commit/6b534d5))
- - **Fixed**: atribút je dirty iba pri zmene hodnoty aj typu (`!==`)
+ - **Fixed**: an attribute is flagged dirty only when its value or type changes (`!==`)
    ([`78eb892`](https://github.com/backbonesk/php-activerecord/commit/78eb892))
- - **Fixed**: atribút sa označí ako dirty iba vtedy, keď sa hodnota naozaj zmenila
+ - **Fixed**: an attribute is flagged dirty only when its value actually changes
    ([`00325f2`](https://github.com/backbonesk/php-activerecord/commit/00325f2),
    [`f5d94d5`](https://github.com/backbonesk/php-activerecord/commit/f5d94d5))
- - **Fixed**: `DateTime` - kompatibilita s PHP 7.1
+ - **Fixed**: `DateTime` compatibility with PHP 7.1
    ([`401f4d3`](https://github.com/backbonesk/php-activerecord/commit/401f4d3))
 
-#### Kompatibilita s PHP
- - **Changed**: PHP 8.5 - vlastnosti v reťazcoch s `{}`, `static::` callable, nedeklarovaný `$klass`, `fputcsv`
-   escape, `strlen(null)` v `Utils`/`Expressions`, `is_hash`
+#### PHP compatibility
+ - **Changed**: PHP 8.5 - `{}` property interpolation in strings, `static::` callables, undeclared `$klass`,
+   `fputcsv` escape, `strlen(null)` in `Utils`/`Expressions`, `is_hash`
    ([`cced8d0`](https://github.com/backbonesk/php-activerecord/commit/cced8d0))
- - **Changed**: PHP 8.4 - explicitne nullable typy, `AllowDynamicProperties`, návratový typ `Errors::getIterator`
+ - **Changed**: PHP 8.4 - explicit nullable types, `AllowDynamicProperties`, `Errors::getIterator` return type
    ([`99f34ff`](https://github.com/backbonesk/php-activerecord/commit/99f34ff),
    [`65f4768`](https://github.com/backbonesk/php-activerecord/commit/65f4768),
    [`c43985c`](https://github.com/backbonesk/php-activerecord/commit/c43985c),
@@ -79,25 +81,25 @@ Prvá verzia s podporou PHP 8.x (8.1 až 8.5), minimálna verzia PHP je 7.1. Obs
    [`a3243e3`](https://github.com/backbonesk/php-activerecord/commit/a3243e3))
  - **Changed**: PHP 8.2+ - `AllowDynamicProperties`
    ([`a120b4a`](https://github.com/backbonesk/php-activerecord/commit/a120b4a))
- - **Changed**: PHP 8.2 ([`268e441`](https://github.com/backbonesk/php-activerecord/commit/268e441) až
+ - **Changed**: PHP 8.2 ([`268e441`](https://github.com/backbonesk/php-activerecord/commit/268e441) to
    [`6f96726`](https://github.com/backbonesk/php-activerecord/commit/6f96726))
  - **Changed**: PHP 8.1 ([`1d14161`](https://github.com/backbonesk/php-activerecord/commit/1d14161),
    [`d77aa36`](https://github.com/backbonesk/php-activerecord/commit/d77aa36))
- - **Changed**: PHP 8.0 - povinný parameter za voliteľným, `private final` metódy
+ - **Changed**: PHP 8.0 - required parameter after an optional one, `private final` methods
    ([`a15d12d`](https://github.com/backbonesk/php-activerecord/commit/a15d12d),
    [`ed2a42f`](https://github.com/backbonesk/php-activerecord/commit/ed2a42f))
  - **Changed**: PHP 7.4 ([`09cc57f`](https://github.com/backbonesk/php-activerecord/commit/09cc57f))
- - **⚠️ Breaking**: minimálna verzia PHP je 7.1
+ - **⚠️ Breaking**: the minimum PHP version is 7.1
    ([`57d434c`](https://github.com/backbonesk/php-activerecord/commit/57d434c))
 
-#### Upstream zmeny medzi 1.0 a forkom (2010 - 2012, výber)
- - cache schémy tabuliek a modelov (Memcache, Memcached, APC), namespace pre cache
- - `SqliteAdapter`, opravy `PgsqlAdapter`, `?charset=` v connection stringu
- - eager loading - rešpektuje voľby vzťahov, namespace v `has_many` `through`
+#### Upstream changes between 1.0 and the fork (2010 - 2012, selection)
+ - table schema and model caching (Memcache, Memcached, APC), cache namespace
+ - `SqliteAdapter`, `PgsqlAdapter` fixes, `?charset=` in the connection string
+ - eager loading respects relationship options, namespaces in `has_many` `through`
  - `Model::query()`, `reestablish_connection()`, `attribute_is_dirty()`, `validate()`
- - `update_all()` / `delete_all()` s `limit` / `order` (MySQL, SQLite)
- - serializácia `to_csv` a `to_array`, `Errors::to_array()`
- - `assign_attribute` pre stĺpce s iným inflected názvom (veľké písmená)
+ - `update_all()` / `delete_all()` with `limit` / `order` (MySQL, SQLite)
+ - `to_csv` and `to_array` serialization, `Errors::to_array()`
+ - `assign_attribute` for columns whose inflected name differs (capital letters)
 
 ### 1.0 (June 27, 2010)
  - `d2bed65` fixed an error with eager loading when no records exist
